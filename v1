@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesha Teacher Portal | Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lesha: {
+                            orange: '#F26522',
+                            navy: '#1a202c',
+                            green: '#10b981',
+                            warning: '#f97316',
+                            danger: '#ef4444',
+                            bg: '#f8fafc'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            /* Radial dot pattern for subtle texture */
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Utility for circular progress */
+        .circular-chart {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            max-height: 250px;
+        }
+        .circle-bg {
+            fill: none;
+            stroke: #e2e8f0;
+            stroke-width: 2.5;
+        }
+        .circle {
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            animation: progress 1s ease-out forwards;
+        }
+        @keyframes progress {
+            0% { stroke-dasharray: 0 100; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .hidden-view {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-lesha-navy min-h-screen flex flex-col">
+
+    <header class="sticky top-0 z-50 bg-lesha-navy text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="router.navigateTo('dashboard')">
+                <div class="bg-lesha-orange p-1.5 rounded-lg">
+                    <i class="fa-solid fa-graduation-cap text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-xl tracking-wide leading-none">LESHA</h1>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest">Teacher Portal</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex flex-col items-end mr-2">
+                    <span class="text-sm font-medium">Ms. Sarah Johnson</span>
+                    <span class="text-xs text-gray-400">Windhoek High School</span>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <span class="bg-lesha-orange/20 text-lesha-orange border border-lesha-orange px-2 py-0.5 rounded text-xs font-semibold">2026</span>
+                    <div class="h-10 w-10 rounded-full bg-lesha-orange flex items-center justify-center text-white font-bold shadow-lg border-2 border-slate-700">
+                        SJ
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <div id="view-dashboard" class="fade-in">
+            <h2 class="text-2xl font-bold mb-6 text-lesha-navy">Dashboard Overview</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 border-b-4 border-b-lesha-navy">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-sm font-medium">Total Students</p>
+                        <i class="fa-solid fa-users text-slate-300"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-lesha-navy">87</h3>
+                    <p class="text-xs text-slate-400 mt-1">Across 3 classes</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 border-b-4 border-b-lesha-green">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-sm font-medium">Avg Performance</p>
+                        <i class="fa-solid fa-chart-line text-lesha-green"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-lesha-navy">76.5%</h3>
+                    <p class="text-xs text-emerald-600 mt-1 font-medium"><i class="fa-solid fa-arrow-up mr-1"></i> 3.2% vs last term</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 border-b-4 border-b-lesha-danger">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-sm font-medium">Needs Help</p>
+                        <i class="fa-solid fa-triangle-exclamation text-lesha-danger"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-lesha-navy">23</h3>
+                    <p class="text-xs text-red-500 mt-1 font-medium">Students at risk</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 border-b-4 border-b-lesha-orange">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-sm font-medium">Active This Week</p>
+                        <i class="fa-solid fa-clock text-lesha-orange"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-lesha-navy">72</h3>
+                    <p class="text-xs text-slate-400 mt-1">82% engagement rate</p>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-lesha-navy">My Classes</h2>
+                <button class="text-sm text-lesha-orange font-medium hover:underline">Manage Classes</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden border border-slate-100 group">
+                    <div class="h-2 bg-lesha-green w-full"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-lg text-lesha-navy">Biology NSSCAS</h3>
+                                <p class="text-sm text-slate-500">Grade 12A</p>
+                            </div>
+                            <span class="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded-full font-semibold">Good</span>
+                        </div>
+
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500"><i class="fa-solid fa-user-graduate w-5 text-center"></i> Students</span>
+                                <span class="font-medium">32</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500"><i class="fa-solid fa-chart-pie w-5 text-center"></i> Avg Score</span>
+                                <span class="font-medium text-lesha-navy">78.3%</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500"><i class="fa-solid fa-circle-exclamation w-5 text-center"></i> Weak Areas</span>
+                                <span class="font-medium text-orange-500">8 students</span>
+                            </div>
+                        </div>
+
+                        <button onclick="router.navigateTo('class')" class="w-full py-2.5 border border-slate-200 text-slate-600 rounded-lg hover:bg-lesha-orange hover:text-white hover:border-lesha-orange transition-colors font-medium text-sm">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden border border-slate-100">
+                    <div class="h-2 bg-lesha-warning w-full"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-lg text-lesha-navy">Biology NSSCAS</h3>
+                                <p class="text-sm text-slate-500">Grade 12B</p>
+                            </div>
+                            <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full font-semibold">Needs Attention</span>
+                        </div>
+
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500"><i class="fa-solid fa-user-graduate w-5 text-center"></i> Students</span>
+                                <span class="font-medium">28</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500"><i class="fa-solid fa-chart-pie w-5 text-center"></i> Avg Score</span>
+                                <span class="font-medium text-lesha-navy">72.1%</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500"><i class="fa-solid fa-circle-exclamation w-5 text-center"></i> Weak Areas</span>
+                                <span class="font-medium text-red-500">12 students</span>
+                            </div>
+                        </div>
+
+                        <button class="w-full py-2.5 border border-slate-200 text-slate-600 rounded-lg hover:bg-lesha-orange hover:text-white hover:border-lesha-orange transition-colors font-medium text-sm">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden border border-slate-100">
+                    <div class="h-2 bg-lesha-green w-full"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-lg text-lesha-navy">Mathematics NSSCAS</h3>
+                                <p class="text-sm text-slate-500">Grade 12</p>
+                            </div>
+                            <span class="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded-full font-semibold">Excellent</span>
+                        </div>
+
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500"><i class="fa-solid fa-user-graduate w-5 text-center"></i> Students</span>
+                                <span class="font-medium">27</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500"><i class="fa-solid fa-chart-pie w-5 text-center"></i> Avg Score</span>
+                                <span class="font-medium text-lesha-navy">81.4%</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500"><i class="fa-solid fa-circle-exclamation w-5 text-center"></i> Weak Areas</span>
+                                <span class="font-medium text-emerald-500">3 students</span>
+                            </div>
+                        </div>
+
+                        <button class="w-full py-2.5 border border-slate-200 text-slate-600 rounded-lg hover:bg-lesha-orange hover:text-white hover:border-lesha-orange transition-colors font-medium text-sm">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-class" class="hidden-view fade-in">
+            <button onclick="router.navigateTo('dashboard')" class="text-slate-500 hover:text-lesha-orange text-sm mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </button>
+
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                <div>
+                    <h1 class="text-2xl font-bold text-lesha-navy">Biology NSSCAS Grade 11</h1>
+                    <p class="text-slate-500 text-sm mt-1">32 Students Enrolled • Academic Year 2026</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex gap-3">
+                    <button class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50">Settings</button>
+                    <button class="px-4 py-2 bg-lesha-orange text-white rounded-lg text-sm font-medium hover:bg-orange-600 shadow-md shadow-orange-200">
+                        <i class="fa-solid fa-plus mr-1"></i> Assign Work
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="h-12 w-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wide font-semibold">Curriculum Progress</p>
+                        <p class="text-xl font-bold text-lesha-navy">65% <span class="text-xs font-normal text-slate-400">completed</span></p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="h-12 w-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wide font-semibold">Class Avg Score</p>
+                        <p class="text-xl font-bold text-lesha-navy">78.3% <span class="text-xs font-normal text-slate-400">last 30 days</span></p>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="h-12 w-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wide font-semibold">Recent Study Time</p>
+                        <p class="text-xl font-bold text-lesha-navy">456m <span class="text-xs font-normal text-slate-400">last 7 days</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-b border-slate-200 mb-6">
+                <nav class="-mb-px flex space-x-8">
+                    <a href="#" class="border-lesha-orange text-lesha-orange whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Overview & Students
+                    </a>
+                    <a href="#" class="border-transparent text-slate-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Reports
+                    </a>
+                    <a href="#" class="border-transparent text-slate-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Curriculum
+                    </a>
+                </nav>
+            </div>
+
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-lesha-navy mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-fire text-lesha-orange"></i> Topics Where Multiple Students Struggle
+                </h3>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 border-l-4 border-l-orange-400 p-4 relative group">
+                        <span class="absolute top-4 right-4 text-xs font-semibold bg-orange-100 text-orange-700 px-2 py-0.5 rounded">High Priority</span>
+                        <p class="text-xs text-slate-400 mb-1">Theme 1: Classification</p>
+                        <h4 class="font-bold text-lesha-navy mb-3 pr-6">Binomial Nomenclature</h4>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-xs items-center">
+                                <span class="text-slate-600">Affected Students</span>
+                                <span class="font-bold bg-slate-100 px-1.5 rounded">12</span>
+                            </div>
+                            <div class="flex justify-between text-xs items-center">
+                                <span class="text-slate-600">Avg Score</span>
+                                <span class="font-bold text-orange-600">65%</span>
+                            </div>
+                        </div>
+                        <button class="w-full text-xs font-medium text-slate-600 bg-slate-50 py-2 rounded hover:bg-slate-100 transition-colors">View Students</button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 border-l-4 border-l-red-500 p-4 relative">
+                        <span class="absolute top-4 right-4 text-xs font-semibold bg-red-100 text-red-700 px-2 py-0.5 rounded">Critical</span>
+                        <p class="text-xs text-slate-400 mb-1">Theme 2: Transport</p>
+                        <h4 class="font-bold text-lesha-navy mb-3 pr-6">Water Potential</h4>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-xs items-center">
+                                <span class="text-slate-600">Affected Students</span>
+                                <span class="font-bold bg-slate-100 px-1.5 rounded">15</span>
+                            </div>
+                            <div class="flex justify-between text-xs items-center">
+                                <span class="text-slate-600">Avg Score</span>
+                                <span class="font-bold text-red-600">62%</span>
+                            </div>
+                        </div>
+                        <button class="w-full text-xs font-medium text-slate-600 bg-slate-50 py-2 rounded hover:bg-slate-100 transition-colors">View Students</button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 border-l-4 border-l-orange-400 p-4 relative">
+                        <span class="absolute top-4 right-4 text-xs font-semibold bg-orange-100 text-orange-700 px-2 py-0.5 rounded">Medium</span>
+                        <p class="text-xs text-slate-400 mb-1">Theme 2: Molecules</p>
+                        <h4 class="font-bold text-lesha-navy mb-3 pr-6">Biochemical Tests</h4>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-xs items-center">
+                                <span class="text-slate-600">Affected Students</span>
+                                <span class="font-bold bg-slate-100 px-1.5 rounded">8</span>
+                            </div>
+                            <div class="flex justify-between text-xs items-center">
+                                <span class="text-slate-600">Avg Score</span>
+                                <span class="font-bold text-orange-600">71%</span>
+                            </div>
+                        </div>
+                        <button class="w-full text-xs font-medium text-slate-600 bg-slate-50 py-2 rounded hover:bg-slate-100 transition-colors">View Students</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                    <h3 class="font-bold text-lg text-lesha-navy">Student Performance</h3>
+                    <div class="relative">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="studentSearch" placeholder="Search students..." class="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-lesha-orange focus:ring-1 focus:ring-lesha-orange w-full sm:w-64">
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                                <th class="p-4 font-semibold cursor-pointer hover:text-lesha-orange" onclick="tableManager.sort('name')">Student Name <i class="fa-solid fa-sort ml-1"></i></th>
+                                <th class="p-4 font-semibold cursor-pointer hover:text-lesha-orange" onclick="tableManager.sort('progress')">Progress <i class="fa-solid fa-sort ml-1"></i></th>
+                                <th class="p-4 font-semibold cursor-pointer hover:text-lesha-orange" onclick="tableManager.sort('score')">Avg Score <i class="fa-solid fa-sort ml-1"></i></th>
+                                <th class="p-4 font-semibold cursor-pointer hover:text-lesha-orange" onclick="tableManager.sort('weakness')">Weak Areas <i class="fa-solid fa-sort ml-1"></i></th>
+                                <th class="p-4 font-semibold">Last Active</th>
+                                <th class="p-4 font-semibold">Status</th>
+                                <th class="p-4 font-semibold"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody" class="text-sm divide-y divide-slate-100">
+                            </tbody>
+                    </table>
+                </div>
+                <div class="p-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                    <span>Showing 1-12 of 32 students</span>
+                    <div class="flex gap-1">
+                        <button class="px-2 py-1 border rounded hover:bg-slate-50">Prev</button>
+                        <button class="px-2 py-1 bg-lesha-orange text-white border border-lesha-orange rounded">1</button>
+                        <button class="px-2 py-1 border rounded hover:bg-slate-50">2</button>
+                        <button class="px-2 py-1 border rounded hover:bg-slate-50">3</button>
+                        <button class="px-2 py-1 border rounded hover:bg-slate-50">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-student" class="hidden-view fade-in">
+            <button onclick="router.navigateTo('class')" class="text-slate-500 hover:text-lesha-orange text-sm mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Back to Class List
+            </button>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-center relative overflow-hidden">
+                        <div id="student-status-bar" class="absolute top-0 left-0 w-full h-2 bg-lesha-orange"></div>
+                        <div class="h-20 w-20 mx-auto bg-slate-200 rounded-full flex items-center justify-center text-2xl font-bold text-slate-500 mb-3 border-4 border-white shadow-md">
+                            <span id="student-initials">MK</span>
+                        </div>
+                        <h2 id="student-name" class="text-xl font-bold text-lesha-navy">Maria Kamati</h2>
+                        <p id="student-email" class="text-sm text-slate-500 mb-2">maria.kamati@student.lesha.com</p>
+                        <span id="student-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-700">Needs Attention</span>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-lesha-navy mb-4">Performance Overview</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-slate-600">Overall Progress</span>
+                                    <span id="student-progress-text" class="font-bold">45%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2">
+                                    <div id="student-progress-bar" class="bg-lesha-navy h-2 rounded-full" style="width: 45%"></div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                                <span class="text-sm text-slate-600">Avg Quiz Score</span>
+                                <span id="student-score" class="font-bold text-lg text-lesha-navy">68%</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
+                                <span class="text-sm text-red-700">Weak Objectives</span>
+                                <span id="student-weak-count" class="font-bold text-lg text-red-600">8</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-lesha-navy mb-4">Recent Quiz Trend</h3>
+                        <div class="flex items-end justify-between h-32 gap-2 pt-4 border-b border-slate-200 pb-2">
+                            <div class="w-full bg-slate-100 rounded-t relative group">
+                                <div class="absolute bottom-0 w-full bg-blue-300 rounded-t hover:bg-blue-400 transition-all" style="height: 72%"></div>
+                                <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs bg-slate-800 text-white px-1 rounded opacity-0 group-hover:opacity-100">72%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-t relative group">
+                                <div class="absolute bottom-0 w-full bg-blue-300 rounded-t hover:bg-blue-400 transition-all" style="height: 65%"></div>
+                                <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs bg-slate-800 text-white px-1 rounded opacity-0 group-hover:opacity-100">65%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-t relative group">
+                                <div class="absolute bottom-0 w-full bg-blue-300 rounded-t hover:bg-blue-400 transition-all" style="height: 68%"></div>
+                                <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs bg-slate-800 text-white px-1 rounded opacity-0 group-hover:opacity-100">68%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-t relative group">
+                                <div class="absolute bottom-0 w-full bg-blue-300 rounded-t hover:bg-blue-400 transition-all" style="height: 70%"></div>
+                                <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs bg-slate-800 text-white px-1 rounded opacity-0 group-hover:opacity-100">70%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-t relative group">
+                                <div class="absolute bottom-0 w-full bg-red-400 rounded-t hover:bg-red-500 transition-all" style="height: 66%"></div>
+                                <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs bg-slate-800 text-white px-1 rounded opacity-0 group-hover:opacity-100">66%</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-red-500 mt-2 font-medium"><i class="fa-solid fa-arrow-trend-down mr-1"></i> Declining in last attempt</div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 space-y-6">
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="p-4 bg-slate-50 border-b border-slate-100">
+                            <h3 class="font-bold text-lesha-navy">Focus Areas (Action Required)</h3>
+                        </div>
+                        <div class="p-4 space-y-4">
+                            <div class="border border-red-100 rounded-lg p-4 bg-white shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center">
+                                <div class="flex-grow">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="text-xs font-bold text-slate-500 uppercase">Binomial Nomenclature</span>
+                                        <span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded font-semibold">Score: 62%</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500">Theme 1: Classification • Last attempt 3 days ago</p>
+                                    <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2">
+                                        <div class="bg-red-500 h-1.5 rounded-full" style="width: 62%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <button class="px-3 py-1.5 bg-lesha-orange text-white text-xs font-medium rounded hover:bg-orange-600 shadow-sm">Assign Retake</button>
+                                </div>
+                            </div>
+
+                            <div class="border border-red-100 rounded-lg p-4 bg-white shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center">
+                                <div class="flex-grow">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="text-xs font-bold text-slate-500 uppercase">Water Potential</span>
+                                        <span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded font-semibold">Score: 58%</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500">Theme 2: Transport • Last attempt 5 days ago</p>
+                                    <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2">
+                                        <div class="bg-red-500 h-1.5 rounded-full" style="width: 58%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <button class="px-3 py-1.5 bg-lesha-orange text-white text-xs font-medium rounded hover:bg-orange-600 shadow-sm">Assign Video</button>
+                                </div>
+                            </div>
+
+                             <div class="border border-orange-100 rounded-lg p-4 bg-white shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center">
+                                <div class="flex-grow">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="text-xs font-bold text-slate-500 uppercase">Osmosis Experiments</span>
+                                        <span class="text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded font-semibold">Score: 65%</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500">Theme 2: Transport • Last attempt 4 days ago</p>
+                                    <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2">
+                                        <div class="bg-orange-400 h-1.5 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <button class="px-3 py-1.5 bg-white border border-slate-300 text-slate-600 text-xs font-medium rounded hover:bg-slate-50">View Errors</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-lesha-navy mb-4">Module Breakdown</h3>
+
+                        <div class="bg-white border border-slate-200 rounded-lg mb-3 overflow-hidden">
+                            <button class="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 transition-colors text-left">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-lesha-navy">🧬 Theme 1: Classification, Biodiversity & Conservation</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Completed: 6/12 objectives • Avg: 64%</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-down text-slate-400 text-xs"></i>
+                            </button>
+                            <div class="p-4 border-t border-slate-100 space-y-3">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-600">Classification</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-24 h-1.5 bg-slate-100 rounded-full"><div class="bg-yellow-400 h-1.5 rounded-full" style="width: 62%"></div></div>
+                                        <span class="text-xs font-medium w-8 text-right">62%</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-600">Biodiversity</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-24 h-1.5 bg-slate-100 rounded-full"><div class="bg-emerald-400 h-1.5 rounded-full" style="width: 70%"></div></div>
+                                        <span class="text-xs font-medium w-8 text-right">70%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="bg-white border border-slate-200 rounded-lg mb-3 overflow-hidden">
+                            <button class="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 transition-colors text-left">
+                                <div>
+                                    <h4 class="font-semibold text-sm text-lesha-navy">🧫 Theme 2: Organisation and Maintenance</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Completed: 8/15 objectives • Avg: 67%</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-down text-slate-400 text-xs"></i>
+                            </button>
+                            <div class="p-4 border-t border-slate-100 space-y-3">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-600">The Microscope</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-24 h-1.5 bg-slate-100 rounded-full"><div class="bg-emerald-500 h-1.5 rounded-full" style="width: 75%"></div></div>
+                                        <span class="text-xs font-medium w-8 text-right">75%</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-600">Cell Structure</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-24 h-1.5 bg-slate-100 rounded-full"><div class="bg-emerald-500 h-1.5 rounded-full" style="width: 72%"></div></div>
+                                        <span class="text-xs font-medium w-8 text-right">72%</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-600">Membranes & Transport</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-24 h-1.5 bg-slate-100 rounded-full"><div class="bg-red-500 h-1.5 rounded-full" style="width: 58%"></div></div>
+                                        <span class="text-xs font-medium w-8 text-right">58%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-xl p-4">
+                        <h4 class="text-sm font-bold text-lesha-navy mb-3">Recent Activity Log</h4>
+                        <ul class="space-y-4 relative border-l border-slate-200 ml-2 pl-4">
+                            <li class="relative">
+                                <div class="absolute -left-5 top-1 h-2.5 w-2.5 rounded-full bg-slate-300"></div>
+                                <p class="text-xs text-slate-500">3 days ago</p>
+                                <p class="text-sm text-lesha-navy">Completed quiz on <strong>"Binomial Nomenclature"</strong> <span class="text-red-500">(62%)</span></p>
+                            </li>
+                            <li class="relative">
+                                <div class="absolute -left-5 top-1 h-2.5 w-2.5 rounded-full bg-slate-300"></div>
+                                <p class="text-xs text-slate-500">4 days ago</p>
+                                <p class="text-sm text-lesha-navy">Watched video on <strong>"Osmosis experiments"</strong></p>
+                            </li>
+                            <li class="relative">
+                                <div class="absolute -left-5 top-1 h-2.5 w-2.5 rounded-full bg-slate-300"></div>
+                                <p class="text-xs text-slate-500">1 week ago</p>
+                                <p class="text-sm text-lesha-navy">Completed quiz on <strong>"Microscope measurements"</strong> <span class="text-emerald-500">(78%)</span></p>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- Mock Data ---
+        const students = [
+            { id: 1, name: "Sarah Amutenya", progress: 91, score: 88, weakCount: 1, lastActive: "1 hour ago", status: "Excellent" },
+            { id: 2, name: "Tanya Mbango", progress: 85, score: 82, weakCount: 2, lastActive: "2 hours ago", status: "Excellent" },
+            { id: 3, name: "Michael Hango", progress: 78, score: 79, weakCount: 3, lastActive: "Yesterday", status: "Good" },
+            { id: 4, name: "David Uutoni", progress: 72, score: 76, weakCount: 4, lastActive: "Yesterday", status: "Good" },
+            { id: 5, name: "Peter Shapaka", progress: 67, score: 74, weakCount: 5, lastActive: "Today", status: "Good" },
+            { id: 6, name: "Selma Iipinge", progress: 75, score: 73, weakCount: 4, lastActive: "2 days ago", status: "Good" },
+            { id: 7, name: "Thomas Nakale", progress: 55, score: 69, weakCount: 6, lastActive: "3 days ago", status: "Needs Attention" },
+            { id: 8, name: "Maria Kamati", progress: 45, score: 68, weakCount: 8, lastActive: "3 days ago", status: "Needs Attention" }, // Focus Student
+            { id: 9, name: "Anna Shikongo", progress: 52, score: 65, weakCount: 9, lastActive: "4 days ago", status: "Needs Attention" },
+            { id: 10, name: "Paulus Shaningwa", progress: 41, score: 62, weakCount: 10, lastActive: "5 days ago", status: "At Risk" },
+            { id: 11, name: "Johannes Nghifindwa", progress: 38, score: 61, weakCount: 12, lastActive: "1 week ago", status: "At Risk" },
+            { id: 12, name: "Ester Ndjamba", progress: 88, score: 86, weakCount: 1, lastActive: "Today", status: "Excellent" },
+        ];
+
+        // --- Logic Class: View Router ---
+        const router = {
+            views: ['dashboard', 'class', 'student'],
+
+            navigateTo(viewId) {
+                // Hide all views
+                this.views.forEach(v => {
+                    document.getElementById(`view-${v}`).classList.add('hidden-view');
+                });
+
+                // Show requested view
+                const activeView = document.getElementById(`view-${viewId}`);
+                activeView.classList.remove('hidden-view');
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+
+                // Specific initializers
+                if(viewId === 'class') {
+                    tableManager.render(students);
+                }
+            }
+        };
+
+        // --- Logic Class: Table Manager ---
+        const tableManager = {
+            currentData: [...students],
+
+            getBadgeColor(status) {
+                switch(status) {
+                    case 'Excellent': return 'bg-emerald-100 text-emerald-700';
+                    case 'Good': return 'bg-green-100 text-green-700';
+                    case 'Needs Attention': return 'bg-orange-100 text-orange-700';
+                    case 'At Risk': return 'bg-red-100 text-red-700';
+                    default: return 'bg-gray-100 text-gray-700';
+                }
+            },
+
+            render(data) {
+                const tbody = document.getElementById('studentTableBody');
+                tbody.innerHTML = '';
+
+                data.forEach(student => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0";
+                    tr.onclick = function() {
+                        // If it's Maria, go to populated view, else just go to view (mock behavior)
+                        router.navigateTo('student');
+                        // In a real app, we'd pass the ID to load specific data
+                        if(student.id !== 8) {
+                            // Update header mock-up for demo purposes
+                            document.getElementById('student-name').innerText = student.name;
+                            document.getElementById('student-initials').innerText = student.name.split(' ').map(n=>n[0]).join('');
+                            document.getElementById('student-email').innerText = student.name.toLowerCase().replace(' ', '.') + '@student.lesha.com';
+                            document.getElementById('student-score').innerText = student.score + '%';
+                        } else {
+                            // Reset to Maria (Hardcoded data in HTML)
+                            document.getElementById('student-name').innerText = "Maria Kamati";
+                            document.getElementById('student-initials').innerText = "MK";
+                            document.getElementById('student-email').innerText = "maria.kamati@student.lesha.com";
+                            document.getElementById('student-score').innerText = "68%";
+                        }
+                    };
+
+                    tr.innerHTML = `
+                        <td class="p-4 font-medium text-lesha-navy">${student.name}</td>
+                        <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="bg-lesha-navy h-full" style="width: ${student.progress}%"></div>
+                                </div>
+                                <span class="text-xs text-slate-500">${student.progress}%</span>
+                            </div>
+                        </td>
+                        <td class="p-4">
+                            <div class="font-bold ${student.score < 60 ? 'text-red-500' : (student.score < 75 ? 'text-lesha-orange' : 'text-lesha-green')}">
+                                ${student.score}%
+                            </div>
+                        </td>
+                        <td class="p-4">
+                            <span class="${student.weakCount > 5 ? 'text-red-500 font-bold' : 'text-slate-500'}">${student.weakCount}</span>
+                        </td>
+                        <td class="p-4 text-slate-500 text-xs">${student.lastActive}</td>
+                        <td class="p-4">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${this.getBadgeColor(student.status)}">
+                                ${student.status}
+                            </span>
+                        </td>
+                        <td class="p-4 text-right">
+                            <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            },
+
+            search(query) {
+                const lowerQuery = query.toLowerCase();
+                const filtered = students.filter(s =>
+                    s.name.toLowerCase().includes(lowerQuery) ||
+                    s.status.toLowerCase().includes(lowerQuery)
+                );
+                this.currentData = filtered;
+                this.render(filtered);
+            },
+
+            sort(key) {
+                // Simple toggle sort logic
+                this.currentData.sort((a, b) => {
+                   if (key === 'name') return a.name.localeCompare(b.name);
+                   return b[key] - a[key]; // Descending for numbers
+                });
+                this.render(this.currentData);
+            }
+        };
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup Search Listener
+            document.getElementById('studentSearch').addEventListener('input', (e) => {
+                tableManager.search(e.target.value);
+            });
+
+            // Start at dashboard
+            router.navigateTo('dashboard');
+        });
+
+    </script>
+</body>
+</html>
